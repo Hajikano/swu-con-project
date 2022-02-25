@@ -1,0 +1,98 @@
+<Layout>
+    <NavBar>
+        <view style="width:10px;"></view>
+        <icon bindtap="DC_Layout_onBack" class="material-icons">navigate_before</icon>
+        <view style="width:10px;"></view>
+        {{DC_Layout.title}}
+    </NavBar>
+    <view style="{{Main.style._}}">
+        <view style="{{Tab.style._}}">
+            <view style="{{Tab.style.tab}}">
+                <van-tabs color="#409EFF" active="{{ Tab.active }}" bind:change="Tab_onChange">
+                    <van-tab title="所有课程"></van-tab>
+                    <van-tab title="{{DC_Layout.role === DC_Layout.role_teacher ? '我发布的' : '我加入的'}}"></van-tab>
+                </van-tabs>
+            </view>
+            <view wx:if="{{DC_Layout.role === DC_Layout.role_teacher}}" bindtap="Tab_onAddCourse" style="{{Tab.style.action}}">
+                <icon class="material-icons" style="{{Tab.style.action_icon}}">add_circle</icon>
+            </view>
+        </view>
+        <van-search clearable="{{false}}" use-action-slot value="{{ CourseList.courseName }}" placeholder="请输入搜索关键词" bind:change="CourseList_onChange" bind:search="CourseList_onSearch">
+            <view slot="action" bindtap="CourseList_onSearch">搜索</view>
+        </van-search>
+        <scroll-view scroll-top="{{CourseList.topPosition}}" bindscrolltolower="CourseList_onToLower" refresher-enabled refresher-triggered="{{CourseList.isRefresh}}" bindrefresherrefresh="CourseList_onRefresh" scroll-y enable-back-to-top style="{{CourseList.style._}}">
+            <block wx:if="{{ CourseList.courseLists[Tab.active].list.length > 0 }}">
+                <view wx:for="{{CourseList.courseLists[Tab.active].list}}" wx:key="id" style="{{CourseCard.style._}}">
+                    <view style="{{CourseCard.style.header}}background-color:{{CourseCard.colors[index%CourseCard.colors.length]}};">
+                        <van-cell custom-class="card-header-cell" border="{{false}}">
+                            <view style="{{CourseCard.style.header_cell_title}}" class="cellText" slot="title">
+                                {{item.name}}
+                            </view>
+                            <view style="{{CourseCard.style.header_cell_title}}" class="cellText" slot="right-icon">
+                                <icon wx:if="{{((DC_Layout.role === DC_Layout.role_teacher) && item.has) || ((DC_Layout.role === DC_Layout.role_student) && !item.has)}}" data-id="{{item.id}}" data-index="{{index}}" bindtap="CourseCard_onSheetShow" class="material-icons">
+                                    more_vert
+                                </icon>
+                            </view>
+                        </van-cell>
+                    </view>
+                    <view style="{{CourseCard.style.content}}">
+                        <van-cell data-id="{{item.id}}" data-index="{{index}}" data-has="{{item.has}}" bind:click="CourseCard_onClick" use-label-slot center is-link="{{item.has === 1}}">
+                            <view style="{{CourseCard.style.content_cell_title}}" class="cellText" slot="title">
+                                {{item.teacherName}}
+                            </view>
+                            <view style="margin-bottom:3px;margin-right:10px;">
+                                <van-tag wx:if="{{item.has}}" plain color="#FF8552">
+                                    {{DC_Layout.role === DC_Layout.role_teacher? '我的课程' : '已加入'}}
+                                </van-tag>
+                            </view>
+                            <view style="{{CourseCard.style.content_cell_label}}" class="cellText" slot="label">
+                                课程教师
+                            </view>
+                        </van-cell>
+                    </view>
+                    <view wx:if="{{CourseCard.active_course_id === item.id && CourseCard.isDetailShow}}" wx:key="id" style="{{CourseCard.style.detail}}">
+                        <view wx:if="{{CourseCard.isDetailComplete}}">
+                            <view style="{{CourseCard.style.content}}">
+                                <van-cell border="{{false}}">
+                                    <view style="{{CourseCard.style.content_cell_title}}" class="cellText" slot="title">
+                                        课程实验
+                                    </view>
+                                    <view data-id="{{item.id}}" bindtap="CourseCard_onAddLab" slot="right-icon">
+                                        <icon wx:if="{{DC_Layout.role === DC_Layout.role_teacher}}" style="color:#F56C6C;" class="material-icons">
+                                            add
+                                        </icon>
+                                    </view>
+                                </van-cell>
+                            </view>
+                            <block wx:if="{{CourseCard.labList.length > 0}}">
+                                <van-cell wx:for="{{CourseCard.labList}}" wx:key="id" wx:for-item="labItem" wx:for-index="labIndex" data-id="{{labItem.id}}" data-index="{{labIndex}}" bind:click="CourseCard_onLabSheetShow" use-label-slot center is-link="{{labItem.status[0] !== '已结束'}}" >
+                                    <view style="{{CourseCard.style.content_cell_title}}" class="cellText" slot="title">
+                                        {{labItem.name}}
+                                    </view>
+                                    <view style="margin-bottom:3px;margin-right:10px;">
+                                        <van-tag plain color="{{labItem.status[1]}}">
+                                            {{labItem.status[0]}}
+                                        </van-tag>
+                                    </view>
+                                </van-cell>
+                            </block>
+                            <block wx:else>
+                                <van-empty image="search" description="该课程还没有实验哦" />
+                            </block>
+                        </view>
+                        <view wx:else style="width:100%;text-align:center;">
+                            <van-loading vertical color="#409EFF">加载中...</van-loading>
+                        </view>
+                    </view>
+                </view>
+            </block>
+            <block wx:else>
+                <van-empty description="暂无相关课程" />
+            </block>
+            <view style="height:100px;"></view>
+        </scroll-view>
+    </view>
+    <van-action-sheet show="{{ CourseCard.isSheetShow }}" actions="{{ CourseCard.sheetActions[DC_Layout.role] }}" cancel-text="取消" bind:close="CourseCard_onSheetClose" bind:select="CourseCard_onSheetSelect" bind:cancel="CourseCard_onSheetClose" />
+    <van-action-sheet show="{{ CourseCard.isLabSheetShow }}" actions="{{ CourseCard.labSheetActions[DC_Layout.role] }}" cancel-text="取消" bind:close="CourseCard_onLabSheetClose" bind:select="CourseCard_onLabSheetSelect" bind:cancel="CourseCard_onLabSheetClose" />
+    <van-dialog id="van-dialog" />
+</Layout>

@@ -1,0 +1,6 @@
+.ta-mine-avatar-cell {
+    background-color: rgba(0, 0, 0, 0) !important;
+}
+.ta-mine-avatar-img {
+    margin-right: 10px;
+}

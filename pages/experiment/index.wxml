@@ -1,0 +1,188 @@
+<Layout>
+    <NavBar>
+        <view style="width:10px;"></view>
+        <icon bindtap="DC_Layout_onBack" class="material-icons">navigate_before</icon>
+        <view style="width:10px;"></view>
+        {{DC_Layout.title}}
+    </NavBar>
+    <view style="{{Main.style._}}">
+        <van-tabs color="#409EFF" active="{{ Tab.active }}" bind:change="Tab_onChange">
+            <van-tab title="标样"></van-tab>
+            <van-tab title="样本"></van-tab>
+            <van-tab title="设置"></van-tab>
+        </van-tabs>
+        <block wx:if="{{Sample.isComplete}}">
+            <view style="{{Sample.style.content}}">
+                <block wx:if="{{Tab.active === 0}}">
+                    <block wx:if="{{Sample.guideSampleList.length > 0}}">
+                        <view style="{{Sample.style._}}" wx:for="{{Sample.guideSampleList}}" wx:key="id">
+                            <van-swipe-cell right-width="{{ 65 }}">
+                                <view data-index="{{index}}" bindtap="Sample_onClick" style="{{Sample.style.container}}{{Sample.style.height}}">
+                                    <!-- 嵌套一层防止该图像组件有莫名多出的像素 -->
+                                    <view style="{{Sample.style.image}}">
+                                        <van-image fit="cover" width="{{Sample.imageWidth}}" height="{{Sample.imageHeight}}" src="{{item.path}}" />
+                                    </view>
+                                    <view style="{{Sample.style.info}}{{Sample.style.height}}">
+                                        <van-row>
+                                            <van-col style="{{Sample.style.title}}" span="12">
+                                                {{item.subjectName}}
+                                            </van-col>
+                                        </van-row>
+                                        <van-row>
+                                            <van-col style="{{Sample.style.label}}" span="12">
+                                                浓度
+                                            </van-col>
+                                            <van-col style="{{Sample.style.label}}" span="12">
+                                                {{item.density}}
+                                            </van-col>
+                                        </van-row>
+                                        <van-row>
+                                            <van-col style="{{Sample.style.label}}" span="12">
+                                                Red
+                                            </van-col>
+                                            <van-col style="{{Sample.style.label}}" span="12">
+                                                {{item.avarage.rgbk[0]}}
+                                            </van-col>
+                                        </van-row>
+                                        <van-row>
+                                            <van-col style="{{Sample.style.label}}" span="12">
+                                                Green
+                                            </van-col>
+                                            <van-col style="{{Sample.style.label}}" span="12">
+                                                {{item.avarage.rgbk[1]}}
+                                            </van-col>
+                                        </van-row>
+                                        <van-row>
+                                            <van-col style="{{Sample.style.label}}" span="12">
+                                                Blue
+                                            </van-col>
+                                            <van-col style="{{Sample.style.label}}" span="12">
+                                                {{item.avarage.rgbk[2]}}
+                                            </van-col>
+                                        </van-row>
+                                        <van-row>
+                                            <van-col style="{{Sample.style.label}}" span="12">
+                                                Key
+                                            </van-col>
+                                            <van-col style="{{Sample.style.label}}" span="12">
+                                                {{item.avarage.rgbk[3]}}
+                                            </van-col>
+                                        </van-row>
+                                    </view>
+                                    <view style="background-color:{{item.avarage.colorStr}};{{Sample.style.color}}{{Sample.style.height}}"></view>
+                                </view>
+                                <view data-index="{{index}}" bindtap="Sample_onDeleteSample" style="{{Sample.style.deleteContainer}}" slot="right">
+                                    <icon style="font-size:30px" class="material-icons">
+                                        delete_forever
+                                    </icon>
+                                </view>
+                            </van-swipe-cell>
+                        </view>
+                    </block>
+                    <block wx:else>
+                        <van-empty image="search" description="标样库中还没有标样哟"></van-empty>
+                    </block>
+                </block>
+                <block wx:if="{{Tab.active === 1}}">
+                    <block wx:if="{{Sample.sampleList.length > 0}}">
+                        <view style="{{Sample.style._}}" wx:for="{{Sample.sampleList}}" wx:key="id">
+                            <van-swipe-cell right-width="{{ 65 }}">
+                                <view data-index="{{index}}" bindtap="Sample_onClick" style="{{Sample.style.container}}{{Sample.style.height}}">
+                                    <!-- 嵌套一层防止该图像组件有莫名多出的像素 -->
+                                    <view style="{{Sample.style.image}}">
+                                        <van-image fit="cover" width="{{Sample.imageWidth}}" height="{{Sample.imageHeight}}" src="{{item.path}}" />
+                                    </view>
+                                    <view style="{{Sample.style.info}}{{Sample.style.height}}">
+                                        <van-row>
+                                            <van-col style="{{Sample.style.title}}" span="12">
+                                                {{item.subjectName}}
+                                            </van-col>
+                                        </van-row>
+                                        <van-row>
+                                            <van-col style="{{Sample.style.label}}" span="12">
+                                                浓度
+                                            </van-col>
+                                            <van-col style="{{Sample.style.label}}" span="12">
+                                                {{item.density}}
+                                            </van-col>
+                                        </van-row>
+                                        <van-row>
+                                            <van-col style="{{Sample.style.label}}" span="12">
+                                                Red
+                                            </van-col>
+                                            <van-col style="{{Sample.style.label}}" span="12">
+                                                {{item.avarage.rgbk[0]}}
+                                            </van-col>
+                                        </van-row>
+                                        <van-row>
+                                            <van-col style="{{Sample.style.label}}" span="12">
+                                                Green
+                                            </van-col>
+                                            <van-col style="{{Sample.style.label}}" span="12">
+                                                {{item.avarage.rgbk[1]}}
+                                            </van-col>
+                                        </van-row>
+                                        <van-row>
+                                            <van-col style="{{Sample.style.label}}" span="12">
+                                                Blue
+                                            </van-col>
+                                            <van-col style="{{Sample.style.label}}" span="12">
+                                                {{item.avarage.rgbk[2]}}
+                                            </van-col>
+                                        </van-row>
+                                        <van-row>
+                                            <van-col style="{{Sample.style.label}}" span="12">
+                                                Key
+                                            </van-col>
+                                            <van-col style="{{Sample.style.label}}" span="12">
+                                                {{item.avarage.rgbk[3]}}
+                                            </van-col>
+                                        </van-row>
+                                    </view>
+                                    <view style="background-color:{{item.avarage.colorStr}};{{Sample.style.color}}{{Sample.style.height}}"></view>
+                                </view>
+                                <view data-index="{{index}}" bindtap="Sample_onDeleteSample" style="{{Sample.style.deleteContainer}}" slot="right">
+                                    <icon style="font-size:30px" class="material-icons">
+                                        delete_forever
+                                    </icon>
+                                </view>
+                            </van-swipe-cell>
+                        </view>
+                    </block>
+                    <block wx:else>
+                        <van-empty image="search" description="样本库中还没有样本哟"></van-empty>
+                    </block>
+                </block>
+                <block wx:if="{{Tab.active === 2}}">
+                    <van-cell-group title="文本">
+                        <van-field center clearable bind:blur="Settings_rename" bind:change="Settings_onNameChange" value="{{ Settings.recordName }}" placeholder="请输入实验记录名">
+                            <view slot="label">实验记录名</view>
+                        </van-field>
+                        <van-field center clearable bind:blur="Settings_renameDensityRemark" bind:change="Settings_onDensityChange" value="{{ Settings.densityRemark }}" placeholder="请输入横坐标内容">
+                            <view slot="label">横坐标内容</view>
+                        </van-field>
+                    </van-cell-group>
+                    <van-cell-group title="其它">
+                        <van-cell bind:click="Sample_onClear" is-link>
+                            <view slot="title">清空实验数据</view>
+                        </van-cell>
+                        <van-cell bind:click="Sample_onDeleteRecord" is-link>
+                            <view slot="title">删除实验记录</view>
+                        </van-cell>
+                    </van-cell-group>
+                </block>
+                <van-goods-action wx:if="{{Tab.active !== 2}}">
+                    <van-goods-action-button wx:if="{{Tab.active === 0}}" disabled="{{Sample.guideSampleList.length >= Sample.maxGuideSampleNum}}" text="添加标样" color="#F56C6C" bind:click="Sample_onAdd" />
+                    <van-goods-action-button wx:if="{{Tab.active === 1}}" disabled="{{Sample.sampleList.length >= Sample.maxSampleNum}}" text="添加样本" color="#F56C6C" bind:click="Sample_onAdd" />
+                    <van-goods-action-button disabled="{{(Sample.guideSampleList.length < Sample.minGuideSampleNum) || (Sample.sampleList.length < Sample.minSampleNum)}}" text="标准曲线" color="#409EFF" bind:click="Sample_onCalculate" />
+                </van-goods-action>
+            </view>
+        </block>
+        <block wx:else>
+            <view style="width:100%;text-align:center;margin:50px 0">
+                <van-loading vertical color="#409EFF">加载中...</van-loading>
+            </view>
+        </block>
+    </view>
+</Layout>
+<van-dialog id="van-dialog" />

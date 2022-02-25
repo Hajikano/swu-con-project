@@ -1,0 +1,27 @@
+@import '/utils/MD_Wxss/index.wxss';
+
+::-webkit-scrollbar {
+    display: none;
+}
+
+.grid-card {
+    margin-top: 10px;
+}
+
+.grid-card-visible {
+    overflow: visible !important;
+}
+
+.grid-card-content {
+    box-shadow: 0px 0px 10px 5px rgba(99, 99, 172, 0.05);
+    border-radius: 10px;
+    width: 100%;
+    overflow: hidden;
+}
+
+.cellText {
+    overflow: hidden;
+    text-overflow: ellipsis;
+    display: -webkit-box;
+    -webkit-box-orient: vertical;
+}

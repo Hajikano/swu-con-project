@@ -1,0 +1,24 @@
+<Layout isNavBar="{{false}}" style="{{Main.style._}}">
+    <view style="{{Main.style.navbarSpace}}"></view>
+    <view style="{{Main.style.headerHeight}}">
+        <view style="{{Header.style.icon}}">
+            <van-image fit="contain" width="{{Header.iconWidth}}px" height="{{Header.iconHeight}}px" src="/public/icon.png" />
+        </view>
+        <view style="{{Header.style.title}}">{{Main.title}}</view>
+        <view style="{{Main.style.label}}{{Header.style.label}}">浓度预测 实验助手</view>
+    </view>
+    <view style="{{Main.style.middleSpaceHeight}}">
+        <view style="{{ActionArea.style.action}}">
+            <van-button bind:click="ActionArea_onClick" round type="info" block>账号登录</van-button>
+        </view>
+        <view style="{{Main.style.label}}{{ActionArea.style.marginTop}}">or</view>
+        <view style="{{ActionArea.style.marginTop}}">
+            <text style="{{ActionArea.style.link}}" bindtap="ActionArea_onGetAccount">账户申请</text>
+            <text style="{{Main.style.label}}">|</text>
+            <text style="{{ActionArea.style.link}}" bindtap="ActionArea_onTourist">游客访问</text>
+        </view>
+    </view>
+    <view style="{{Main.style.footerHeight}}">
+        <text style="{{Main.style.label}}{{Footer.style.label}}">西南大学化学化工学院研制©2021</text>
+    </view>
+</Layout>

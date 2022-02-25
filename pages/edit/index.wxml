@@ -1,0 +1,102 @@
+<Layout>
+    <NavBar>
+        <view style="width:10px;"></view>
+        <text bindtap="DC_Layout_onBack" class="material-icons">navigate_before</text>
+        <view style="width:10px;"></view>
+        {{DC_Layout.title}}
+    </NavBar>
+    <view style="{{Main.style._}}overflow-y:{{Main.scrollable ? 'scroll':'hidden'}};">
+        <view style="{{Main.style.canvas_container}}">
+            <!-- 离屏canvas 用于双重缓冲 -->
+            <canvas type="2d" id="{{Canvas_Basic.canvasID}}_off" hidden></canvas>
+            <!-- 背景图canvas 用于静态渲染背景图 -->
+            <canvas type="2d" id="{{Canvas_Basic.canvasID}}" style="{{Canvas_Basic.style._}}height:{{Canvas_Basic.canvasHeightWxml}}px;"></canvas>
+            <!-- 样本点canvas 用于渲染样本点 -->
+            <canvas type="2d" id="{{Canvas_Basic.canvasID}}_sample" style="{{Canvas_Sample.style._}}height:{{Canvas_Basic.canvasHeightWxml}}px;" bindtouchend="Canvas_Sample_onTouchMoveEnd" bindtouchstart="Canvas_Sample_onTouchstart" bindtouchmove="Canvas_Sample_onTouchMove" hidden="{{ConsoleBoard.isHiddenSample}}"></canvas>
+        </view>
+        <view style="{{ConsoleBoard.style._}}">
+            <view style="{{ImageUploaded.style.gridContainer}}" wx:if="{{!ImageUploaded.isUploaded}}">
+                <van-grid center="{{false}}" custom-class="grid-card" clickable column-num="1" gutter="0" border="{{false}}">
+                    <van-grid-item bind:click="ImageUploaded_onUploadImage" use-slot content-class="grid-card-content">
+                        <view style="{{ImageUploaded.style.gridContent}}">
+                            <icon style="color:#F56C6C;{{ImageUploaded.style.gridItemIcon}}" class="material-icons">
+                                add_a_photo
+                            </icon>
+                            <view style="{{ImageUploaded.style.gridItemInfo}}">
+                                <view style="{{ImageUploaded.style.gridItemTitle}}">选择图片</view>
+                            </view>
+                        </view>
+                    </van-grid-item>
+                </van-grid>
+            </view>
+            <block wx:else>
+                <van-tabs color="#409EFF" active="{{ ConsoleBoard.tabActive }}">
+                    <van-tab title="基本设定">
+                        <van-cell-group title="信息">
+                            <van-field center clearable bind:blur="ConsoleBoard_onDensityBlur" bind:change="ConsoleBoard_onDensityChange" value="{{ SamplePointSet.density }}" type="digit" placeholder="请输入浓度数值" maxlength="10">
+                                <view slot="label">浓度数值</view>
+                            </van-field>
+                            <van-field center clearable bind:blur="ConsoleBoard_onSubjectNameBlur" bind:change="ConsoleBoard_onSubjectNameChange" value="{{ ConsoleBoard.subjectName }}" placeholder="请输入样本/标样名" maxlength="20">
+                                <view slot="label">样本/标样名</view>
+                            </van-field>
+                        </van-cell-group>
+                        <van-cell-group title="图片">
+                            <van-cell title="图片选择" is-link bind:click="ImageUploaded_onUploadImage" />
+                            <van-cell title="图片重载" is-link bind:click="Canvas_Basic_onRefresh" />
+                        </van-cell-group>
+                        <van-cell-group title="采样点">
+                            <van-cell title="隐藏采样点">
+                                <van-switch checked="{{ConsoleBoard.isHiddenSample}}" bind:change="ConsoleBoard_onHiddenSample" slot="right-icon" size="20" />
+                            </van-cell>
+                            <van-cell title="锁定采样点">
+                                <van-switch checked="{{ConsoleBoard.isSamplePointLock}}" bind:change="ConsoleBoard_onLockSample" slot="right-icon" size="20" />
+                            </van-cell>
+                            <van-cell title="清空采样点" is-link bind:click="ConsoleBoard_onClearSample" />
+                        </van-cell-group>
+                    </van-tab>
+                    <van-tab title="采样点">
+                        <view style="{{ConsoleBoard.style.ta1_tagContainer}}">
+                            <van-row gutter="10">
+                                <van-col>
+                                    <van-tag data-index="-1" bindtap="ConsoleBoard_onTagClick" plain="{{ConsoleBoard.tagActive !== -1}}" color="#409EFF" size="medium">
+                                        平均
+                                    </van-tag>
+                                </van-col>
+                                <van-col wx:for="{{SamplePointSet.pointSet}}" wx:key="index">
+                                    <van-tag data-index="{{index}}" bindtap="ConsoleBoard_onTagClick" plain="{{ConsoleBoard.tagActive !== index}}" color="#409EFF" size="medium">
+                                        采样点{{index+1}}
+                                    </van-tag>
+                                </van-col>
+                            </van-row>
+                        </view>
+                        <view style="{{ConsoleBoard.style.ta1_infoContainer}}">
+                            <block wx:if="{{ConsoleBoard.tagActive === -1}}">
+                                <van-cell-group title="平均值">
+                                    <van-cell title="Red" value="{{SamplePointSet.avarage.rgbk[0]}}" />
+                                    <van-cell title="Green" value="{{SamplePointSet.avarage.rgbk[1]}}" />
+                                    <van-cell title="Blue" value="{{SamplePointSet.avarage.rgbk[2]}}" />
+                                    <van-cell title="Key" value="{{SamplePointSet.avarage.rgbk[3]}}" />
+                                </van-cell-group>
+                                <van-cell-group title="颜色参考">
+                                    <view style="{{ConsoleBoard.style.ta1_colorBox}}background-color:{{SamplePointSet.avarage.colorStr}};"></view>
+                                </van-cell-group>
+                            </block>
+                            <block wx:if="{{ConsoleBoard.tagActive >= 0}}">
+                                <van-cell-group title="样本点{{ConsoleBoard.tagActive + 1}}">
+                                    <van-cell title="Red" value="{{SamplePointSet.pointSet[ConsoleBoard.tagActive].rgba[0]}}" />
+                                    <van-cell title="Green" value="{{SamplePointSet.pointSet[ConsoleBoard.tagActive].rgba[1]}}" />
+                                    <van-cell title="Blue" value="{{SamplePointSet.pointSet[ConsoleBoard.tagActive].rgba[2]}}" />
+                                    <van-cell title="Key" value="{{SamplePointSet.pointSet[ConsoleBoard.tagActive].k}}" />
+                                </van-cell-group>
+                                <van-cell-group title="颜色参考">
+                                    <view style="{{ConsoleBoard.style.ta1_colorBox}}background-color:{{SamplePointSet.pointSet[ConsoleBoard.tagActive].colorStr}};"></view>
+                                </van-cell-group>
+                            </block>
+                        </view>
+                    </van-tab>
+                </van-tabs>
+            </block>
+        </view>
+    </view>
+</Layout>
+<van-dialog id="van-dialog" />

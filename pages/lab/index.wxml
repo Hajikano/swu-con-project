@@ -1,0 +1,32 @@
+<Layout>
+    <NavBar>
+        <view style="width:10px;"></view>
+        <icon bindtap="DC_Layout_onBack" class="material-icons">navigate_before</icon>
+        <view style="width:10px;"></view>
+        {{DC_Layout.title}}
+    </NavBar>
+    <scroll-view style="{{Main.style._}}" refresher-triggered="{{Main.isRefresh}}" refresher-enabled bindrefresherrefresh="Main_onRefresh">
+        <block wx:if="{{Steps.status >= 0}}">
+            <view style="{{Steps.style._}}">
+                <view style="{{Steps.style.title}}">实验状态</view>
+                <van-steps steps="{{ Steps.steps }}" active="{{ Steps.status }}" active-color="{{ Steps.activeColor }}" />
+            </view>
+            <view wx:if="{{Steps.status === 0}}" style="{{Contents.style._}}">
+                <van-button bind:click="Contents_onQuestion" color="#409EFF" block>立即答题</van-button>
+            </view>
+            <block wx:if="{{Steps.status === 1}}">
+                <view style="{{Contents.style._}}">
+                    <van-button bind:click="Contents_onCalculate" color="#67C23A" block>标准曲线法</van-button>
+                </view>
+                <view style="{{Contents.style._}}">
+                    <van-button color="#F56C6C" block>提交结果</van-button>
+                </view>
+            </block>
+            <van-empty wx:if="{{Steps.status === 2}}" description="实验已完成" />
+        </block>
+        <view wx:else style="width:100%;text-align:center;margin-top:100px;">
+            <van-loading vertical color="#409EFF">加载中...</van-loading>
+        </view>
+    </scroll-view>
+</Layout>
+<van-dialog id="van-dialog" />

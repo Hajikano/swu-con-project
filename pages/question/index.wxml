@@ -1,0 +1,67 @@
+<Layout>
+    <NavBar>
+        <view style="width:10px;"></view>
+        <text bindtap="DC_Layout_onBack" class="material-icons">navigate_before</text>
+        <view style="width:10px;"></view>
+        {{DC_Layout.title}}
+    </NavBar>
+    <swiper bindchange="Questions_onChangeIndex" current="{{Questions.current}}" style="height:100%;width:100%;" indicator-dots="{{false}}" autoplay="{{false}}" duration="500">
+        <swiper-item wx:if="{{Questions.status === -1}}" style="{{Main.style._}}">
+            <view style="width:100%;text-align:center;margin-top:100px;">
+                <van-loading vertical color="#409EFF">加载中...</van-loading>
+            </view>
+        </swiper-item>
+        <swiper-item wx:if="{{Questions.status >= 0}}" wx:for="{{Questions.questions}}" wx:key="id" style="{{Main.style._}}">
+            <view style="{{Card.style._}}">
+                <view style="{{Card.style.content}}">
+                    <view style="{{Title.style._}}">
+                        <block wx:if="{{Questions.status === 0}}">
+                            <view style="display:inline;">
+                                <van-tag color="{{item.correctOption.length > 1 ? '#409EFF' : '#67C23A'}}">
+                                    {{item.correctOption.length > 1 ? '多选' :'单选'}}
+                                </van-tag>
+                            </view>
+                        </block>
+                        {{item.content}}
+                        <block wx:if="{{Questions.status === 1}}">
+                            <view style="display:inline;">
+                                <van-tag color="{{item.status ? '#67C23A' : '#F56C6C'}}">
+                                    {{item.status ? '回答正确' :'回答错误'}}
+                                </van-tag>
+                            </view>
+                        </block>
+                    </view>
+                    <view style="height:30px;"></view>
+                    <view wx:for="{{item.options}}" wx:key="item" wx:for-item="item_op" wx:for-index="index_op" style="{{ButtonContainer.style._}}">
+                        <van-cell data-idarr="{{[index,index_op]}}" center clickable="{{Questions.status === 0}}" title-style="overflow:hidden;" bind:click="Questions_onClickOption">
+                            <view slot="icon" style="{{ButtonContainer.style.index}}">
+                                {{Questions.indexLabels[index_op]}}
+                            </view>
+                            <view slot="title" class="cellText" style="{{ButtonContainer.style.title}}">
+                                {{item_op}}
+                            </view>
+                            <view slot="right-icon">
+                                <icon wx:if="{{Questions.status === 0}}" class="material-icons" style="{{ButtonContainer.style.icon}}{{item.actives[index_op] === 0 ? '' : 'color:#409EFF;'}}">
+                                    {{item.actives[index_op] === 0 ? 'radio_button_unchecked' : 'radio_button_checked'}}
+                                </icon>
+                                <icon wx:if="{{Questions.status === 1}}" class="material-icons" style="{{ButtonContainer.style.icon}}color:{{item.optionStatus[index_op] === 1 ? '#67C23A' : (item.actives[index_op] === 1 ? '#F56C6C' : '')}};">
+                                    {{item.optionStatus[index_op] === 1 ? 'check_circle' : (item.actives[index_op] === 1 ? 'cancel' : '') }}
+                                </icon>
+                            </view>
+                        </van-cell>
+                    </view>
+                </view>
+            </view>
+        </swiper-item>
+        <swiper-item wx:if="{{Questions.status === 0}}" style="{{Main.style._}}">
+            <van-empty description="已经没有题目啦">
+                <view style="width:180px;margin:auto;margin-top:50px;">
+                    <van-button bind:click="Questions_onQuestionEnd" round color="#F56C6C" block>
+                        已核对无误，确认提交
+                    </van-button>
+                </view>
+            </van-empty>
+        </swiper-item>
+    </swiper>
+</Layout>
+<van-dialog id="van-dialog" />

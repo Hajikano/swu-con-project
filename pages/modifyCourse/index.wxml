@@ -1,0 +1,22 @@
+<Layout>
+    <NavBar>
+        <view style="width:10px;"></view>
+        <icon bindtap="DC_Layout_onBack" class="material-icons">navigate_before</icon>
+        <view style="width:10px;"></view>
+        {{DC_Layout.title}}
+    </NavBar>
+    <view style="{{Main.style._}}">
+        <view style="{{Main.style.fieldContainer}}">
+            <van-field value="{{ Action.courseName }}" bind:change="Action_onCourseNameChange" clearable placeholder="请输入课程名">
+                <view slot="label">
+                    <view style="{{Action.style.headerTitle2}}">课程名</view>
+                </view>
+            </van-field>
+            <view style="{{Action.style.action}}{{Action.style.marginTop}}">
+                <van-button bind:click="Action_onSubmit" type="info" round block>
+                    {{DC_Layout.course_id === null ? '立即添加' : '提交修改'}}
+                </van-button>
+            </view>
+        </view>
+    </view>
+</Layout>

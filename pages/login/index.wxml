@@ -1,0 +1,26 @@
+<Layout>
+    <NavBar>
+        <view style="width:10px;"></view>
+        <icon bindtap="DC_Layout_onBack" class="material-icons">navigate_before</icon>
+        <view style="width:10px;"></view>
+        {{DC_Layout.title}}
+    </NavBar>
+    <view style="{{Main.style._}}">
+        <van-field value="{{ Action.username }}" bind:change="Action_onUsernameChange" clearable placeholder="请输入账号">
+            <view slot="label">
+                <view style="{{Action.style.headerTitle2}}">账号</view>
+            </view>
+        </van-field>
+        <van-field value="{{ Action.password }}" password="{{!Action.isPasswordShow}}" bind:change="Action_onPasswordChange" bind:click-icon="Action_onPasswordVisiableToggle" placeholder="请输入密码" right-icon="{{Action.isPasswordShow ? 'eye-o' : 'closed-eye'}}">
+            <view slot="label">
+                <view style="{{Action.style.headerTitle2}}">密码</view>
+            </view>
+        </van-field>
+        <view style="{{Action.style.action}}{{Action.style.marginTop}}">
+            <van-button bind:click="Action_onLogin" type="info" round block>登录</van-button>
+        </view>
+        <view style="{{Action.style.action}}{{Action.style.marginTop}}{{Action.style.link}}" bindtap="Action_onPasswordForget">
+            忘记密码
+        </view>
+    </view>
+</Layout>

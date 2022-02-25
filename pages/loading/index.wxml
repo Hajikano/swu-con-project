@@ -1,0 +1,5 @@
+<Layout isNavBar="{{false}}">
+    <view style="{{Main.style._}}">
+        <van-loading vertical color="#409EFF" type="spinner">加载中...</van-loading>
+    </view>
+</Layout>

@@ -1,0 +1,180 @@
+<Layout>
+    <NavBar bgColor="{{DC_Tabbar.navBarColor}}">
+        <view style="width:10px;"></view>
+        <text style="font-weight:bold;">{{DC_Tabbar.title}}</text>
+    </NavBar>
+    <view hidden="{{DC_Tabbar.active!=='home'}}" style="{{Main.style._}}">
+        <van-grid center="{{false}}" custom-class="grid-card" clickable column-num="1" gutter="10" border="{{false}}">
+            <van-grid-item bind:click="Home_onLabClick" wx:if="{{DC_Layout.role === DC_Layout.role_teacher}}" use-slot content-class="grid-card-content">
+                <view style="{{Home.style.gridContent}}">
+                    <icon style="color:#F56C6C;{{Home.style.gridContentIcon}}" class="material-icons">
+                        contactless
+                    </icon>
+                    <view style="{{Home.style.gridContentInfo}}">
+                        <view style="{{Home.style.gridContentTitle}}">发布实验</view>
+                        <view style="{{Home.style.gridContentLabel}}">
+                            在已开启的课程中，发布一个新的实验，以供学生进行相关操作。
+                        </view>
+                    </view>
+                </view>
+            </van-grid-item>
+            <van-grid-item bind:click="Home_onLabClick" wx:if="{{DC_Layout.role === DC_Layout.role_student}}" use-slot content-class="grid-card-content">
+                <view style="{{Home.style.gridContent}}">
+                    <icon style="color:#F56C6C;{{Home.style.gridContentIcon}}" class="material-icons">
+                        play_circle
+                    </icon>
+                    <view style="{{Home.style.gridContentInfo}}">
+                        <view style="{{Home.style.gridContentTitle}}">开始实验</view>
+                        <view style="{{Home.style.gridContentLabel}}">根据老师的相关要求，选择一个课程，并进行实验。</view>
+                    </view>
+                </view>
+            </van-grid-item>
+            <van-grid-item bind:click="Home_onCalculate" use-slot content-class="grid-card-content">
+                <view style="{{Home.style.gridContent}}">
+                    <icon style="color:#409EFF;{{Home.style.gridContentIcon}}" class="material-icons">
+                        science
+                    </icon>
+                    <view style="{{Home.style.gridContentInfo}}">
+                        <view style="{{Home.style.gridContentTitle}}">标准曲线法</view>
+                        <view style="{{Home.style.gridContentLabel}}">
+                            输入若干图像以及数据，预测最后一张图像的浓度，并生成预测直线。将创建新实验记录。
+                        </view>
+                    </view>
+                </view>
+            </van-grid-item>
+        </van-grid>
+        <view style="{{RecordCard.style._}}">
+            <van-cell border="{{false}}" center>
+                <text slot="title" style="{{RecordCard.style.headerTitle}}">本地实验记录</text>
+            </van-cell>
+            <block wx:if="{{RecordCard.isComplete}}">
+                <block wx:if="{{RecordCard.fileList.length > 0}}">
+                    <van-cell bind:click="RecordCard_onClick" data-dirName="{{item.dirName}}" wx:for="{{RecordCard.fileList}}" wx:key="dirName" border="{{index+1 < RecordCard.fileList.length}}" use-label-slot center is-link>
+                        <icon slot="icon" style="color:#E6A23C;{{RecordCard.style.cellIcon}}" class="material-icons">
+                            source
+                        </icon>
+                        <view slot="title" style="{{RecordCard.style.cellTitle}}">
+                            {{item.recordName}}
+                        </view>
+                        <view slot="label" style="{{RecordCard.style.cellLabel}}">
+                            {{item.timeago}}
+                        </view>
+                    </van-cell>
+                </block>
+                <block wx:else>
+                    <van-empty image="search" description="还没有实验记录哦" />
+                </block>
+            </block>
+            <block wx:else>
+                <view style="width:100%;text-align:center;margin:50px 0">
+                    <van-loading vertical color="#909399">加载中...</van-loading>
+                </view>
+            </block>
+        </view>
+    </view>
+    <scroll-view bindscrolltolower="Videos_onToLower" refresher-enabled refresher-triggered="{{Videos.isRefresh}}" bindrefresherrefresh="Videos_onRefresh" scroll-y enable-back-to-top hidden="{{DC_Tabbar.active!=='videos'}}" style="{{Videos.style._}}">
+        <view wx:if="{{Videos.isOK === 0}}" style="width:100%;text-align:center;margin-top:100px;">
+            <van-loading vertical color="#409EFF" type="spinner">加载中...</van-loading>
+        </view>
+        <block wx:if="{{Videos.isOK === 1}}">
+            <view style="{{Videos.style.cell_container}}" wx:for="{{Videos.videoUrlList}}" wx:key="id">
+                <van-cell border="{{false}}" use-label-slot bind:click="Videos_onAddressClick" data-bvid="{{item.bvid}}" center is-link>
+                    <view style="{{Videos.style.cell_title}}" class="cellText" slot="title">
+                        {{item.name}}
+                    </view>
+                    <view style="{{Videos.style.cell_label}}" class="cellText" slot="label">
+                        {{item.label}}
+                    </view>
+                </van-cell>
+            </view>
+            <view style="height:50px;"></view>
+        </block>
+        <view wx:if="{{Videos.isOK === 2}}" style="width:200%;text-align:center;margin-top:100px;">
+            <van-empty description="暂无数据" />
+        </view>
+    </scroll-view>
+    <view hidden="{{DC_Tabbar.active!=='mine'}}" style="{{Main.style._}}">
+        <van-cell border="{{false}}" use-label-slot custom-class="ta-mine-avatar-cell" center>
+            <van-image slot="icon" custom-class="ta-mine-avatar-img" width="60px" height="60px" round fit="cover" src="/public/avatar_{{DC_Layout.role === DC_Layout.role_teacher ? 'teacher' : 'student'}}.png" />
+            <text slot="title" style="{{Mine.style.avatarTitle}}">{{Mine.name}}</text>
+            <text slot="label" style="{{Mine.style.avatarLabel}}">{{Mine.schoolName}}</text>
+        </van-cell>
+        <van-grid center="{{false}}" custom-class="grid-card grid-card-visible" clickable column-num="2" gutter="10" border="{{false}}">
+            <van-grid-item bind:click="Mine_onCourseClick" wx:if="{{DC_Layout.role === DC_Layout.role_teacher || DC_Layout.role === DC_Layout.role_student}}" use-slot content-class="grid-card-content">
+                <view style="{{Mine.style.gridContent}}">
+                    <icon style="color:#E6A23C;{{Mine.style.gridItemIcon}}" class="material-icons">
+                        class
+                    </icon>
+                    <view>
+                        <view style="{{Mine.style.gridItemTitle}}">课程</view>
+                        <view style="{{Mine.style.gridItemLabel}}">
+                            {{DC_Layout.role === 1?'已发布课程':'已加入课程'}}
+                        </view>
+                    </view>
+                </view>
+            </van-grid-item>
+            <van-grid-item bind:click="Mine_onSecureClick" wx:if="{{DC_Layout.role === DC_Layout.role_teacher || DC_Layout.role === DC_Layout.role_student}}" use-slot content-class="grid-card-content">
+                <view style="{{Mine.style.gridContent}}">
+                    <icon style="color:#67C23A;{{Mine.style.gridItemIcon}}" class="material-icons">
+                        health_and_safety
+                    </icon>
+                    <view>
+                        <view style="{{Mine.style.gridItemTitle}}">安全</view>
+                        <view style="{{Mine.style.gridItemLabel}}">修改密码</view>
+                    </view>
+                </view>
+            </van-grid-item>
+            <van-grid-item use-slot content-class="grid-card-content" bind:click="Mine_onInfoClick">
+                <view style="{{Mine.style.gridContent}}">
+                    <icon style="color:#409EFF;{{Mine.style.gridItemIcon}}" class="material-icons">
+                        info
+                    </icon>
+                    <view>
+                        <view style="{{Mine.style.gridItemTitle}}">关于</view>
+                        <view style="{{Mine.style.gridItemLabel}}">关于小程序</view>
+                    </view>
+                </view>
+            </van-grid-item>
+            <van-grid-item wx:if="{{DC_Layout.role === DC_Layout.role_teacher || DC_Layout.role === DC_Layout.role_student}}" bind:click="Mine_onLogout" use-slot content-class="grid-card-content">
+                <view style="{{Mine.style.gridContent}}">
+                    <icon style="color:#F56C6C;{{Mine.style.gridItemIcon}}" class="material-icons">
+                        logout
+                    </icon>
+                    <view>
+                        <view style="{{Mine.style.gridItemTitle}}">登出</view>
+                        <view style="{{Mine.style.gridItemLabel}}">注销登录状态</view>
+                    </view>
+                </view>
+            </van-grid-item>
+            <van-grid-item wx:if="{{DC_Layout.role === DC_Layout.role_tourist}}" bind:click="Mine_accountRestore" use-slot content-class="grid-card-content">
+                <view style="{{Mine.style.gridContent}}">
+                    <icon style="color:#67C23A;{{Mine.style.gridItemIcon}}" class="material-icons">
+                        login
+                    </icon>
+                    <view>
+                        <view style="{{Mine.style.gridItemTitle}}">登录</view>
+                        <view style="{{Mine.style.gridItemLabel}}">享受完整功能</view>
+                    </view>
+                </view>
+            </van-grid-item>
+        </van-grid>
+    </view>
+    <van-tabbar active-color="#F56C6C" active="{{ DC_Tabbar.active }}" bind:change="DC_Tabbar_onChange">
+        <van-tabbar-item name="home">
+            主页
+            <icon slot="icon" class="material-icons">home</icon>
+            <icon slot="icon-active" class="material-icons">home</icon>
+        </van-tabbar-item>
+        <van-tabbar-item name="videos">
+            视频
+            <icon slot="icon" class="material-icons">camera_indoor</icon>
+            <icon slot="icon-active" class="material-icons">camera_indoor</icon>
+        </van-tabbar-item>
+        <van-tabbar-item name="mine">
+            我的
+            <icon slot="icon" class="material-icons">person_pin</icon>
+            <icon slot="icon-active" class="material-icons">person_pin</icon>
+        </van-tabbar-item>
+    </van-tabbar>
+</Layout>
+<van-dialog id="van-dialog" />

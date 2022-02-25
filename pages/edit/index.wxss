@@ -1,0 +1,15 @@
+.ta-mine-avatar-cell {
+    background-color: rgba(0, 0, 0, 0) !important;
+}
+.ta-mine-avatar-img {
+    margin-right: 10px;
+}
+.ta-mine-grid {
+    margin-top: 10px;
+    overflow: visible !important;
+}
+.ta-mine-grid-item {
+    box-shadow: 0px 0px 10px 5px rgba(99, 99, 172, 0.05);
+    border-radius: 10px;
+    width: 100%;
+}

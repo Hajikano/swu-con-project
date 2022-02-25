@@ -1,0 +1,45 @@
+<Layout>
+    <NavBar>
+        <view style="width:10px;"></view>
+        <icon bindtap="DC_Layout_onBack" class="material-icons">navigate_before</icon>
+        <view style="width:10px;"></view>
+        {{DC_Layout.title}}
+    </NavBar>
+    <view style="{{Main.style._}}">
+        <van-field value="{{ Action.labName }}" bind:change="Action_onLabNameChange" placeholder="请输入实验名" input-align="right">
+            <view slot="label">
+                <view style="{{Action.style.headerTitle2}}">实验名</view>
+            </view>
+        </van-field>
+        <van-cell value="{{tools.trans2Date(Action.startTime)}}" is-link bind:click="Action_onDateCellClick" data-status="{{1}}">
+            <view slot="title">
+                <view style="{{Action.style.headerTitle2}}">开始时间</view>
+            </view>
+        </van-cell>
+        <van-cell value="{{tools.trans2Date(Action.endTime)}}" is-link border="{{false}}" bind:click="Action_onDateCellClick" data-status="{{2}}">
+            <view slot="title">
+                <view style="{{Action.style.headerTitle2}}">结束时间</view>
+            </view>
+        </van-cell>
+        <view style="{{Action.style.action}}{{Action.style.marginTop}}">
+            <van-button bind:click="Action_onSubmit" type="info" round block>
+                {{DC_Layout.lab_id === null ? '立即添加' : '提交修改'}}
+            </van-button>
+        </view>
+    </view>
+    <van-popup position="bottom" show="{{ Action.popStatus > 0 }}" bind:close="Action_onPopClose">
+        <view style="width:100%;">
+            <van-datetime-picker bind:confirm="Action_onPopClose" bind:cancel="Action_onPopClose" title="开始时间" wx:if="{{Action.popStatus === 1}}" type="datetime" value="{{ Action.startTime }}" bind:input="Action_onDateInput" min-date	="{{Action.minDate}}" />
+            <van-datetime-picker bind:confirm="Action_onPopClose" bind:cancel="Action_onPopClose" title="结束时间" wx:if="{{Action.popStatus === 2}}" type="datetime" value="{{ Action.endTime }}" bind:input="Action_onDateInput" min-date="{{Action.minDate}}"  />
+        </view>
+    </van-popup>
+</Layout>
+<wxs module="tools">
+    function trans2Date(timestamp){
+        var dateTime = getDate(timestamp)
+        return dateTime.toLocaleString()
+    }
+    module.exports = {
+        trans2Date:trans2Date
+    }
+</wxs>

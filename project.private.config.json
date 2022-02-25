@@ -1,0 +1,60 @@
+{
+    "setting": {},
+    "condition": {
+        "plugin": {
+            "list": []
+        },
+        "game": {
+            "list": []
+        },
+        "gamePlugin": {
+            "list": []
+        },
+        "miniprogram": {
+            "list": [
+                {
+                    "name": "home",
+                    "pathName": "pages/home/index",
+                    "query": "",
+                    "scene": null
+                },
+                {
+                    "name": "experiment",
+                    "pathName": "pages/experiment/index",
+                    "query": "",
+                    "scene": null
+                },
+                {
+                    "name": "edit",
+                    "pathName": "pages/edit/index",
+                    "query": "",
+                    "scene": null
+                },
+                {
+                    "name": "course",
+                    "pathName": "pages/course/index",
+                    "query": "",
+                    "scene": null
+                },
+                {
+                    "name": "modifyLab",
+                    "pathName": "pages/modifyLab/index",
+                    "query": "course_id=42&launchPram=add",
+                    "scene": null
+                },
+                {
+                    "name": "lab",
+                    "pathName": "pages/lab/index",
+                    "query": "",
+                    "scene": null
+                },
+                {
+                    "name": "question",
+                    "pathName": "pages/question/index",
+                    "query": "",
+                    "scene": null
+                }
+            ]
+        }
+    }
+}

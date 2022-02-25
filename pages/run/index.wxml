@@ -1,0 +1,385 @@
+<Layout>
+    <NavBar>
+        <view style="width:10px;"></view>
+        <icon bindtap="DC_Layout_onBack" class="material-icons">navigate_before</icon>
+        <view style="width:10px;"></view>
+        {{DC_Layout.title}}
+    </NavBar>
+    <view wx:if="{{DC_Layout.status === 1}}" tyle="{{Main.style._}}">
+        <van-tabs color="#409EFF" active="{{ Tab.active }}" bind:change="Tab_onChange">
+            <van-tab title="Red"></van-tab>
+            <van-tab title="Green"></van-tab>
+            <van-tab title="Blue"></van-tab>
+            <van-tab title="Key"></van-tab>
+        </van-tabs>
+        <view style="{{Tab.style._}}">
+            <!-- Red -->
+            <view wx:if="{{ Tab.active === 0 }}" style="{{EChart.style._}}">
+                <view style="{{EChart.style.card}}">
+                    <view style="{{EChart.style.header}}">
+                        <van-cell>
+                            <view slot="title">
+                                <view style="{{EChart.style.headerTitle}}">样本预测</view>
+                            </view>
+                        </van-cell>
+                        <van-tabs color="#409EFF" active="{{ ChartTab.active }}" bind:change="ChartTab_onChange">
+                            <van-tab wx:for="{{Sample.redDotsSample}}" wx:key="index" title="{{item.name}}">
+                                <view style="{{ChartTab.style._}}">
+                                    <van-cell>
+                                        <view slot="title">
+                                            <view style="{{EChart.style.headerTitle2}}">
+                                                采样值（R）
+                                            </view>
+                                        </view>
+                                        <view>
+                                            <view style="{{EChart.style.headerLabel}}">
+                                                {{item.value[1]}}
+                                            </view>
+                                        </view>
+                                    </van-cell>
+                                    <van-cell>
+                                        <view slot="title">
+                                            <view style="{{EChart.style.headerTitle2}}">
+                                                计算值（R）
+                                            </view>
+                                        </view>
+                                        <view>
+                                            <view style="{{EChart.style.headerLabel}}{{EChart.style.highLight}}">
+                                                {{item.calculate}}
+                                            </view>
+                                        </view>
+                                    </van-cell>
+                                </view>
+                            </van-tab>
+                        </van-tabs>
+                    </view>
+                </view>
+                <view style="{{EChart.style.card}}">
+                    <view style="{{EChart.style.header}}">
+                        <van-cell>
+                            <view slot="title">
+                                <view style="{{EChart.style.headerTitle}}">拟合参数</view>
+                            </view>
+                        </van-cell>
+                        <van-cell>
+                            <view slot="title">
+                                <view style="{{EChart.style.headerTitle2}}">相关系数（R）</view>
+                            </view>
+                            <view>
+                                <view style="{{EChart.style.headerLabel}}">
+                                    {{Sample.redPcorr}}
+                                </view>
+                            </view>
+                        </van-cell>
+                        <van-cell>
+                            <view slot="title">
+                                <view style="{{EChart.style.headerTitle2}}">线性方程（R）</view>
+                            </view>
+                            <view>
+                                <view style="{{EChart.style.headerLabel}}">
+                                    {{Sample.redLineStr}}
+                                </view>
+                            </view>
+                        </van-cell>
+                    </view>
+                </view>
+                <view style="{{EChart.style.card}}">
+                    <view style="{{EChart.style.header}}">
+                        <van-cell>
+                            <view style="{{EChart.style.headerTextContainer}}" slot="title">
+                                <view>
+                                    <view style="{{EChart.style.headerTitle}}">拟合曲线图</view>
+                                </view>
+                                <icon data-id="ec_red" style="font-size:20px;" bindtap="EChart_onSave" class="material-icons">
+                                    save_alt
+                                </icon>
+                            </view>
+                        </van-cell>
+                    </view>
+                    <view id="ec_red_test" style="{{EChart.style.canvas}}">
+                        <ec-canvas id="ec_red" ec="{{ EChart.ec_red }}"></ec-canvas>
+                    </view>
+                </view>
+            </view>
+            <!-- Green -->
+            <view wx:if="{{ Tab.active === 1 }}" style="{{EChart.style._}}">
+                <view style="{{EChart.style.card}}">
+                    <view style="{{EChart.style.header}}">
+                        <van-cell>
+                            <view slot="title">
+                                <view style="{{EChart.style.headerTitle}}">样本预测</view>
+                            </view>
+                        </van-cell>
+                        <van-tabs color="#409EFF" active="{{ ChartTab.active }}" bind:change="ChartTab_onChange">
+                            <van-tab wx:for="{{Sample.greenDotsSample}}" wx:key="index" title="{{item.name}}">
+                                <view style="{{ChartTab.style._}}">
+                                    <van-cell>
+                                        <view slot="title">
+                                            <view style="{{EChart.style.headerTitle2}}">
+                                                采样值（G）
+                                            </view>
+                                        </view>
+                                        <view>
+                                            <view style="{{EChart.style.headerLabel}}">
+                                                {{item.value[1]}}
+                                            </view>
+                                        </view>
+                                    </van-cell>
+                                    <van-cell>
+                                        <view slot="title">
+                                            <view style="{{EChart.style.headerTitle2}}">
+                                                计算值（G）
+                                            </view>
+                                        </view>
+                                        <view>
+                                            <view style="{{EChart.style.headerLabel}}{{EChart.style.highLight}}">
+                                                {{item.calculate}}
+                                            </view>
+                                        </view>
+                                    </van-cell>
+                                </view>
+                            </van-tab>
+                        </van-tabs>
+                    </view>
+                </view>
+                <view style="{{EChart.style.card}}">
+                    <view style="{{EChart.style.header}}">
+                        <van-cell>
+                            <view slot="title">
+                                <view style="{{EChart.style.headerTitle}}">拟合参数</view>
+                            </view>
+                        </van-cell>
+                        <van-cell>
+                            <view slot="title">
+                                <view style="{{EChart.style.headerTitle2}}">相关系数（G）</view>
+                            </view>
+                            <view>
+                                <view style="{{EChart.style.headerLabel}}">
+                                    {{Sample.greenPcorr}}
+                                </view>
+                            </view>
+                        </van-cell>
+                        <van-cell>
+                            <view slot="title">
+                                <view style="{{EChart.style.headerTitle2}}">线性方程（G）</view>
+                            </view>
+                            <view>
+                                <view style="{{EChart.style.headerLabel}}">
+                                    {{Sample.greenLineStr}}
+                                </view>
+                            </view>
+                        </van-cell>
+                    </view>
+                </view>
+                <view style="{{EChart.style.card}}">
+                    <view style="{{EChart.style.header}}">
+                        <van-cell>
+                            <view style="{{EChart.style.headerTextContainer}}" slot="title">
+                                <view>
+                                    <view style="{{EChart.style.headerTitle}}">拟合曲线图</view>
+                                </view>
+                                <icon data-id="ec_green" style="font-size:20px;" bindtap="EChart_onSave" class="material-icons">
+                                    save_alt
+                                </icon>
+                            </view>
+                        </van-cell>
+                    </view>
+                    <view id="ec_green_test" style="{{EChart.style.canvas}}">
+                        <ec-canvas id="ec_green" ec="{{ EChart.ec_green }}"></ec-canvas>
+                    </view>
+                </view>
+            </view>
+            <!-- Blue -->
+            <view wx:if="{{ Tab.active === 2 }}" style="{{EChart.style._}}">
+                <view style="{{EChart.style.card}}">
+                    <view style="{{EChart.style.header}}">
+                        <van-cell>
+                            <view slot="title">
+                                <view style="{{EChart.style.headerTitle}}">样本预测</view>
+                            </view>
+                        </van-cell>
+                        <van-tabs color="#409EFF" active="{{ ChartTab.active }}" bind:change="ChartTab_onChange">
+                            <van-tab wx:for="{{Sample.blueDotsSample}}" wx:key="index" title="{{item.name}}">
+                                <view style="{{ChartTab.style._}}">
+                                    <van-cell>
+                                        <view slot="title">
+                                            <view style="{{EChart.style.headerTitle2}}">
+                                                采样值（B）
+                                            </view>
+                                        </view>
+                                        <view>
+                                            <view style="{{EChart.style.headerLabel}}">
+                                                {{item.value[1]}}
+                                            </view>
+                                        </view>
+                                    </van-cell>
+                                    <van-cell>
+                                        <view slot="title">
+                                            <view style="{{EChart.style.headerTitle2}}">
+                                                计算值（B）
+                                            </view>
+                                        </view>
+                                        <view>
+                                            <view style="{{EChart.style.headerLabel}}{{EChart.style.highLight}}">
+                                                {{item.calculate}}
+                                            </view>
+                                        </view>
+                                    </van-cell>
+                                </view>
+                            </van-tab>
+                        </van-tabs>
+                    </view>
+                </view>
+                <view style="{{EChart.style.card}}">
+                    <view style="{{EChart.style.header}}">
+                        <van-cell>
+                            <view slot="title">
+                                <view style="{{EChart.style.headerTitle}}">拟合参数</view>
+                            </view>
+                        </van-cell>
+                        <van-cell>
+                            <view slot="title">
+                                <view style="{{EChart.style.headerTitle2}}">相关系数（B）</view>
+                            </view>
+                            <view>
+                                <view style="{{EChart.style.headerLabel}}">
+                                    {{Sample.bluePcorr}}
+                                </view>
+                            </view>
+                        </van-cell>
+                        <van-cell>
+                            <view slot="title">
+                                <view style="{{EChart.style.headerTitle2}}">线性方程（B）</view>
+                            </view>
+                            <view>
+                                <view style="{{EChart.style.headerLabel}}">
+                                    {{Sample.blueLineStr}}</view>
+                            </view>
+                        </van-cell>
+                    </view>
+                </view>
+                <view style="{{EChart.style.card}}">
+                    <view style="{{EChart.style.header}}">
+                        <van-cell>
+                            <view style="{{EChart.style.headerTextContainer}}" slot="title">
+                                <view>
+                                    <view style="{{EChart.style.headerTitle}}">拟合曲线图</view>
+                                </view>
+                                <icon data-id="ec_blue" style="font-size:20px;" bindtap="EChart_onSave" class="material-icons">
+                                    save_alt
+                                </icon>
+                            </view>
+                        </van-cell>
+                    </view>
+                    <view id="ec_blue_test" style="{{EChart.style.canvas}}">
+                        <ec-canvas id="ec_blue" ec="{{ EChart.ec_blue }}"></ec-canvas>
+                    </view>
+                </view>
+            </view>
+            <!-- Key -->
+            <view wx:if="{{ Tab.active === 3 }}" style="{{EChart.style._}}">
+                <view style="{{EChart.style.card}}">
+                    <view style="{{EChart.style.header}}">
+                        <van-cell>
+                            <view slot="title">
+                                <view style="{{EChart.style.headerTitle}}">样本预测</view>
+                            </view>
+                        </van-cell>
+                        <van-tabs color="#409EFF" active="{{ ChartTab.active }}" bind:change="ChartTab_onChange">
+                            <van-tab wx:for="{{Sample.keyDotsSample}}" wx:key="index" title="{{item.name}}">
+                                <view style="{{ChartTab.style._}}">
+                                    <van-cell>
+                                        <view slot="title">
+                                            <view style="{{EChart.style.headerTitle2}}">
+                                                采样值（K）
+                                            </view>
+                                        </view>
+                                        <view>
+                                            <view style="{{EChart.style.headerLabel}}">
+                                                {{item.value[1]}}
+                                            </view>
+                                        </view>
+                                    </van-cell>
+                                    <van-cell>
+                                        <view slot="title">
+                                            <view style="{{EChart.style.headerTitle2}}">
+                                                计算值（K）
+                                            </view>
+                                        </view>
+                                        <view>
+                                            <view style="{{EChart.style.headerLabel}}{{EChart.style.highLight}}">
+                                                {{item.calculate}}
+                                            </view>
+                                        </view>
+                                    </van-cell>
+                                </view>
+                            </van-tab>
+                        </van-tabs>
+                    </view>
+                </view>
+                <view style="{{EChart.style.card}}">
+                    <view style="{{EChart.style.header}}">
+                        <van-cell>
+                            <view slot="title">
+                                <view style="{{EChart.style.headerTitle}}">拟合参数</view>
+                            </view>
+                        </van-cell>
+                        <van-cell>
+                            <view slot="title">
+                                <view style="{{EChart.style.headerTitle2}}">相关系数（K）</view>
+                            </view>
+                            <view>
+                                <view style="{{EChart.style.headerLabel}}">
+                                    {{Sample.keyPcorr}}
+                                </view>
+                            </view>
+                        </van-cell>
+                        <van-cell>
+                            <view slot="title">
+                                <view style="{{EChart.style.headerTitle2}}">线性方程（K）</view>
+                            </view>
+                            <view>
+                                <view style="{{EChart.style.headerLabel}}">
+                                    {{Sample.keyLineStr}}</view>
+                            </view>
+                        </van-cell>
+                    </view>
+                </view>
+                <view style="{{EChart.style.card}}">
+                    <view style="{{EChart.style.header}}">
+                        <van-cell>
+                            <view style="{{EChart.style.headerTextContainer}}" slot="title">
+                                <view>
+                                    <view style="{{EChart.style.headerTitle}}">拟合曲线图</view>
+                                </view>
+                                <icon data-id="ec_key" style="font-size:20px;" bindtap="EChart_onSave" class="material-icons">
+                                    save_alt
+                                </icon>
+                            </view>
+                        </van-cell>
+                    </view>
+                    <view id="ec_key_test" style="{{EChart.style.canvas}}">
+                        <ec-canvas id="ec_key" ec="{{ EChart.ec_key }}"></ec-canvas>
+                    </view>
+                </view>
+            </view>
+        </view>
+    </view>
+    <view wx:else style="{{Loading.style._}}">
+        <van-loading wx:if="{{DC_Layout.status === 0}}" vertical color="#409EFF" type="spinner">
+            加载中...
+        </van-loading>
+        <van-empty wx:else image="error" description="出错了"></van-empty>
+    </view>
+</Layout>
+<wxs module="tools">
+    function toFixed2(value){
+        if(typeof value === 'number'){
+            value = value.toFixed(2)
+        }
+        return value
+    }
+    module.exports = {
+        toFixed2:toFixed2
+    }
+</wxs>
